@@ -25,16 +25,15 @@ export default {
 }
 
 .card-title {
-    text-transform: uppercase;
     color: white;
     text-align: center;
-    font-size: 15px;
+    font-size: 20px;
     margin: 10px 0;
 }
 
 .card-type {
     text-align: center;
-    font-size: 13px;
-    margin-bottom: 5px;
+    font-size: 16px;
+    margin-bottom: 6px;
 }
 </style>
