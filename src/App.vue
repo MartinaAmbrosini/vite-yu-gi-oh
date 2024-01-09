@@ -2,9 +2,13 @@
 // importo axios
 import axios from 'axios';
 
+// importo componenti
 import AppHeader from './components/AppHeader.vue'
 import ListItem from './components/ListItem.vue'
+import AppSearch from './components/AppSearch.vue'
+import AppResult from './components/AppResult.vue'
 
+// importo store
 import { store } from './store';
 
 
@@ -12,6 +16,8 @@ export default {
   components: {
     AppHeader,
     ListItem,
+    AppSearch,
+    AppResult
   },
   data() {
     return {
@@ -20,11 +26,37 @@ export default {
   },
   methods: {
     getCard() {
+      let myURL = store.apiURL;
+      let archURL = store.optionApiURL;
+
+      if (store.searchText !== '') {
+        if (myURL.includes('?')) {
+          // se l'URL già contiene ?, aggiungo & e il nuovo parametro
+          myURL += `&${store.archParam}=${store.searchText}`;
+        } else {
+          // Se l'URL non contiene ancora parametri, aggiungi ? seguito dal nuovo parametro
+          myURL += `?${store.archParam}=${store.searchText}`;
+        }
+
+      }
+
+      // chiamata api cards
       axios
-        .get(store.apiURL)
+        .get(myURL)
         .then((res => {
           // console.log(res.data.data);
           store.cardList = res.data.data;
+        }))
+        .catch((err) => {
+          console.log("errori", err);
+        })
+
+      // chiamata api archetype
+      axios
+        .get(archURL)
+        .then((res => {
+          // console.log(res.data);
+          store.archList = res.data;
         }))
         .catch((err) => {
           console.log("errori", err);
@@ -41,6 +73,8 @@ export default {
   <AppHeader />
   <main>
     <div class="container">
+      <AppSearch @filter="getCard" />
+      <AppResult />
       <ListItem />
     </div>
 
